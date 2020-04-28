@@ -1,7 +1,7 @@
 # php-simple-template
 Is a very basic and simple PHP HTML Template handler ideal for simple projects which don't require a lot of complicated functions.
 
-It is good practice to seperate HTML from PHP code and while there is a multitude of template handlers out there, they can be massively overly complicated for what you may need.
+It is good practice to separate HTML from PHP code and while there is a multitude of template handlers out there, they can be massively overly complicated for what you may need.
 
 I created this class several years ago and have updated it to work with PHP7 recently and provided it here in the hope you may find it useful.
 
@@ -28,39 +28,37 @@ Sub Templates can be called whatever you want, but can only contain letters a-z.
 ## Using the Template Class
 To use the class include the class.template.php file within your code or copy and paste it into an existing include file on your code and then assign the class to a variable.
 
-<code>
-  require_once ( "class.template.php" );
-  $tpl = new Template ( 'PATH_TO_TEMPLATE_DIRECTORY' );
-</code>
+```php
+require_once ( "class.template.php" );
+$tpl = new Template ( 'PATH_TO_TEMPLATE_DIRECTORY' );
+```
 
 ### Load a Template file
 Template Files should be placed in to a template directory that you have
 specified in the class constructor. Template files can be called whatever you want, but I recommend using .tpl for consistency.
 
-<code>
-  $tpl->load ( "mytemplatename", "page.tpl" );
-</code>
+```php
+$tpl->load ( "mytemplatename", "page.tpl" );
+```
 
-<ul>
-<li>Arguement 1: An internal name to refer to your template - it must be unique to the current execution or it will be over written.</li>
-<li>Arguement 2: Name of the template file</li>
-</ul>
+* Argument 1: An internal name to refer to your template - it must be unique to the current execution or it will be over written.
+* Argument 2: Name of the template file
 
 ### Assign a Value to a Variable
 To assign a value to a variable you use the below code;
 
-<code>
-  $tpl->add_var ( "variableName", "Variable Text Goes Here" );
-  $tpl->add_var ( "anotherVariable", $something );
-  $tpl->add_var ( "yetAnotherVariable", "Something: " . $something );
-  $tpl->add_var ( "fourthVariable", "You can have {{variableName}} variables within variables like this", true );
-</code>
+```php
+$tpl->add_var ( "variableName", "Variable Text Goes Here" );
+$tpl->add_var ( "anotherVariable", $something );
+$tpl->add_var ( "yetAnotherVariable", "Something: " . $something );
+$tpl->add_var ( "fourthVariable", "You can have {{variableName}} variables within variables like this", true );
+```
 
-<ul>
-<li>Arguement 1: Name of variable to replace</li>
-<li>Arguement 2: Data to replace variable with</li>
-<li>Arguement 3 [OPTIONAL]: Set to true to replace variables within your string with their pre-set values - variable must have been previously set or it will be null.</li>
-</ul>
+* Argument 1: Name of variable to replace<
+* Argument 2: Data to replace variable with
+* Argument 3 **[OPTIONAL]**: Set to true to replace variables within your string with their pre-set values - variable must have been previously set or it will be null.
+
+**Note: If a variable within a template hasn't been defined before you call the build method, it will be treated as null and generate a notice level warning.**
 
 ### Sub Sections
 Sub sections can be used for repeating sections, such as table rows or other data that is generated on the fly from a database.
@@ -69,19 +67,19 @@ Sub Sections are automatically replaced by a temporary variable starting with tp
 
 As they are replaced with temporary variables you can write to them as you would any other variable, however to use it for iteration you can "build" the sub template and assign it to the temporary variable as per below;
 
-<code>
-  $tmp = ""; //Create a temporary variable to hold your repeating data
+```php
+$tmp = ""; //Create a temporary variable to hold your repeating data
 
-  //Do your repeating section, assigning the repeating data to variables that exist within your sub section.
+//Do your repeating section, assigning the repeating data to variables that exist within your sub section.
 
-  while ( $tD = mysqli_result_array ( $query ) ) {
-    $tpl->add_var ( "myName", $tD[0] );
-    $tpl->add_var ( "mySurname", $tD[1] );
+while ( $tD = mysqli_result_array ( $query ) ) {
+  $tpl->add_var ( "myName", $tD[0] );
+  $tpl->add_var ( "mySurname", $tD[1] );
 
-    // Build the Sub Template and append it to our temporary variable
-    $tmp .= $tpl->build ( "mainTemplateName.subTemplateName" );
-  }
+  // Build the Sub Template and append it to our temporary variable
+  $tmp .= $tpl->build ( "mainTemplateName.subTemplateName" );
+}
 
-  // Once finished repeating section, assign the temporary variable to the temporary sub-section variable.
-  $tpl->add_var ( "tplSubsubTemplateName", $tmp );
-</code>
+// Once finished repeating section, assign the temporary variable to the temporary sub-section variable.
+$tpl->add_var ( "tplSubsubTemplateName", $tmp );
+```
