@@ -86,7 +86,7 @@ while ( $tD = mysqli_result_array ( $query ) ) {
 $tpl->add_var ( "tplSubsubTemplateName", $tmp );
 ```
 
-*** Template Building
+### Template Building
 To generate your page for display you call the build method of the template class;
 
 ```php
