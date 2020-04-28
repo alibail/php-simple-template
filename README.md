@@ -58,10 +58,12 @@ $tpl->add_var ( "fourthVariable", "You can have {{variableName}} variables withi
 * Argument 2: Data to replace variable with
 * Argument 3 **[OPTIONAL]**: Set to true to replace variables within your string with their pre-set values - variable must have been previously set or it will be null.
 
+Once a variable has a value assigned to it, it will remain assigned until it is over written or the script finishes executing. Be careful if you are re-using variable names across multiple template files and sub templates.
+
 **Note: If a variable within a template hasn't been defined before you call the build method, it will be treated as null and generate a notice level warning.**
 
 ### Sub Sections
-Sub sections can be used for repeating sections, such as table rows or other data that is generated on the fly from a database.
+Sub sections can be used for repeating sections, such as table rows or other data that is generated on the fly from a database or even to generate error messages if certain conditions are met.
 
 Sub Sections are automatically replaced by a temporary variable starting with tplSub followed by the sub-section name, for example {{tplSubError}} or {{tplSubRow}} or {{tplSubUsers}} or {{tplSubTableData}} which would refer to sub sections called; Error, Row, Users, TableData respectively.
 
@@ -82,4 +84,20 @@ while ( $tD = mysqli_result_array ( $query ) ) {
 
 // Once finished repeating section, assign the temporary variable to the temporary sub-section variable.
 $tpl->add_var ( "tplSubsubTemplateName", $tmp );
+```
+
+*** Template Building
+To generate your page for display you call the build method of the template class;
+
+```php
+echo $tpl->build ( "templateName" ); //Outputs the template to a browser
+$tmp = $tpl->build ( "templateName" ); //Assigns the generated template to a variable
+```
+
+* Argument 1: The template's friendly name that you assigned to it when you loaded the template with the load() method.
+
+*For sub templates, these are identified by <parent template friendly name>.<sub template name>*
+
+```php
+$tmp = $tpl->build ( "templatename.SubTemplate" );
 ```
